@@ -12,7 +12,7 @@ const routes = require("./routes/index")
 app.use(bodyParser.urlencoded({extended:true}))
 app.use(bodyParser.json())
 app.use(cors({
-    origin: "https://testpro-uktu.onrender.com",
+    origin: "*",
     credentials: true
 }))
 
