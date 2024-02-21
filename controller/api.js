@@ -134,7 +134,7 @@ const apiAudio = async (req, res) => {
     file.pipe(res)
 
     //tts 파일을 만들고 지워주어야함.
-    fs.unlink('./audiofile/speech2.mp3', (err) => {if(err) throw err})
+    //fs.unlink('./audiofile/speech2.mp3', (err) => {if(err) throw err})
 
 
 
