@@ -108,8 +108,8 @@ const apiReviewRegister = (req, res) => {
 
 const apiAudio = async (req, res) => {
     //tts 사용시 이 openai코드를 사용해야함.
-    /*const openai = new OpenAI({
-        apiKey: '',
+    const openai = new OpenAI({
+        apiKey: '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',
         dangerouslyAllowBrowser: true
     })
 
@@ -122,7 +122,7 @@ const apiAudio = async (req, res) => {
     })
 
     const buffer = Buffer.from(await mp3.arrayBuffer())
-    await fs.promises.writeFile(speechFile,buffer)*/
+    await fs.promises.writeFile(speechFile,buffer)
 
     
     
@@ -130,11 +130,11 @@ const apiAudio = async (req, res) => {
 
     //tts 사용시 이 코드를 사용해야함.
     res.writeHead(200,{"Content-Type": "audio/mpeg"})
-    const file = fs.createReadStream('./audiofile/kakao.mp3')
+    const file = fs.createReadStream('./audiofile/speech2.mp3')
     file.pipe(res)
 
     //tts 파일을 만들고 지워주어야함.
-    //fs.unlink('./audiofile/speech2.mp3', (err) => {if(err) throw err})
+    fs.unlink('./audiofile/speech2.mp3', (err) => {if(err) throw err})
 
 
 
