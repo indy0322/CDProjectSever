@@ -109,7 +109,7 @@ const apiReviewRegister = (req, res) => {
 const apiAudio = async (req, res) => {
     //tts 사용시 이 openai코드를 사용해야함.
     const openai = new OpenAI({
-        apiKey: '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',
+        apiKey: '',
         dangerouslyAllowBrowser: true
     })
 
