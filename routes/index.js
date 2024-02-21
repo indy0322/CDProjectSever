@@ -11,6 +11,10 @@ router.get("/auth", controller.auth, controller.apiAuth)
 
 router.post("/register", controller.apiRegister)
 
+router.post("/reviewregister", controller.apiReviewRegister)
+
+router.post('/audio', controller.apiAudio)
+
 module.exports = router;
 
 

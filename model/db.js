@@ -25,6 +25,7 @@ const connect = () => {
 }
 
 require('./users')
+require('./reviews')
 
 module.exports = {
     connect
