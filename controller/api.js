@@ -109,7 +109,7 @@ const apiReviewRegister = (req, res) => {
 const apiAudio = async (req, res) => {
     //tts 사용시 이 openai코드를 사용해야함.
     const openai = new OpenAI({
-        apiKey: process.env.CHATGPTKEY,
+        apiKey: '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',//process.env.CHATGPTKEY,
         dangerouslyAllowBrowser: true
     })
 
@@ -134,9 +134,9 @@ const apiAudio = async (req, res) => {
     file.pipe(res)
 
     //tts 파일을 만들고 지워주어야함.
-    setTimeout(() => {
+    /*setTimeout(() => {
         fs.unlink('./audiofile/speech2.mp3', (err) => {if(err) throw err})
-    },5000)
+    },5000)*/
     
 
 
