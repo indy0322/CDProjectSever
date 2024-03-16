@@ -65,14 +65,12 @@ const auth = (req, res, next) => {
 const apiAuth = (req, res) => {
     const nickname = req.decoded.nickname
     const profile = req.decoded.profile
+    console.log(profile, nickname)
 
     return res.status(200).json({
         code: 200,
         message: "정상 토큰",
-        data: {
-            nickname: nickname,
-            profile: profile
-        }
+        data: {nickname: nickname, profile: profile}
     })
 }
 
@@ -109,7 +107,7 @@ const apiReviewRegister = (req, res) => {
 const apiAudio = async (req, res) => {
     //tts 사용시 이 openai코드를 사용해야함.
     const openai = new OpenAI({
-        apiKey: '',//process.env.CHATGPTKEY,
+        apiKey: process.env.CHATGPTKEY,
         dangerouslyAllowBrowser: true
     })
 
