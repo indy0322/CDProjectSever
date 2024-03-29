@@ -3,10 +3,6 @@ const mongoose = require('mongoose')
 const {Schema} = mongoose
 
 const userSchema = new Schema({
-    name: {
-        type: String,
-        require: true
-    },
     email: {
         type: String,
         require: true,
@@ -15,6 +11,16 @@ const userSchema = new Schema({
     password: {
         type: String,
         require: true
+    },
+    code: {
+        type: String,
+        require: true
+    },
+    language1: {
+        type: String
+    },
+    language2: {
+        type: String
     }
 })
 

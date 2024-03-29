@@ -13,7 +13,10 @@ router.post("/register", controller.apiRegister)
 
 router.post("/reviewregister", controller.apiReviewRegister)
 
+router.post('/authnumber',controller.apiAuthNumber)
+
 router.post('/audio', controller.apiAudio)
+
 
 module.exports = router;
 

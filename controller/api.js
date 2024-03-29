@@ -2,10 +2,19 @@ const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose')
 const Users = mongoose.model('Users')
 const Reviews = mongoose.model('Reviews')
+const nodemailer = require('nodemailer')
 
 const fs = require('fs')
 const path = require('path')
 const OpenAI = require('openai')
+
+const transporter = nodemailer.createTransport({
+    service:'gmail',
+    auth:{
+        user: "indy0322230@gmail.com",
+        pass: "perovebckyqnwwwz",
+    }
+})
 
 
 const apiNode = (req, res) => {
@@ -75,6 +84,7 @@ const apiAuth = (req, res) => {
 }
 
 const apiRegister = (req, res) => {
+    console.log(req.body.email,req.body.password,req.body.code,req.body.language1,req.body.language2)
     Users.findOne({email:req.body.email}).exec((err,user) => {
         if(err){
             console.log(err)
@@ -83,7 +93,7 @@ const apiRegister = (req, res) => {
             console.log(user.name)
             return res.json({"message":"존재하는 회원"})
         }else{
-            Users.create({name:req.body.name, email:req.body.email, password:req.body.password},(err) => {
+            Users.create({email:req.body.email, password:req.body.password, code:req.body.code,language1:req.body.language1,language2:req.body.language2},(err) => {
                 if(err){
                     return res.json(err)
                 }
@@ -102,6 +112,23 @@ const apiReviewRegister = (req, res) => {
         return res.json('리뷰등록 완료')
     })
 } 
+
+const apiAuthNumber = (req,res) => {
+    if(req.body.email){
+        
+        transporter.sendMail({
+            from: "indy0322230@gmail.com",
+            to: req.body.email,
+            subject: `Korea EasyTrip's authentification number`,
+            text: `${req.body.number}` 
+        })
+        return res.json("인증번호 발송완료")
+    }
+    else{
+        return res.json("인증번호 발송실패")
+    }
+    
+}
 
 
 const apiAudio = async (req, res) => {
@@ -164,5 +191,6 @@ module.exports = {
     apiAuth,
     apiRegister,
     apiReviewRegister,
-    apiAudio
+    apiAudio,
+    apiAuthNumber
 }
