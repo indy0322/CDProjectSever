@@ -90,8 +90,7 @@ const apiRegister = (req, res) => {
             console.log(err)
         }
         if(user){
-            console.log(user.name)
-            return res.json({"message":"존재하는 회원"})
+            return res.json("존재하는 회원")
         }else{
             Users.create({email:req.body.email, password:req.body.password, code:req.body.code,language1:req.body.language1,language2:req.body.language2},(err) => {
                 if(err){
