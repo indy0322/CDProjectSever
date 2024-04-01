@@ -90,13 +90,13 @@ const apiRegister = (req, res) => {
             console.log(err)
         }
         if(user){
-            return res.json("존재하는 회원")
+            return res.json("existing member")
         }else{
             Users.create({email:req.body.email, password:req.body.password, code:req.body.code,language1:req.body.language1,language2:req.body.language2},(err) => {
                 if(err){
                     return res.json(err)
                 }
-                return res.json('회원가입 완료')
+                return res.json('registration completed')
             })
         }
     })
@@ -121,10 +121,10 @@ const apiAuthNumber = (req,res) => {
             subject: `Korea EasyTrip's authentification number`,
             text: `${req.body.number}` 
         })
-        return res.json("인증번호 발송완료")
+        return res.send("number sent completed")
     }
     else{
-        return res.json("인증번호 발송실패")
+        return res.send("Failed to send number")
     }
     
 }
