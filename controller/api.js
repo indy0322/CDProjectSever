@@ -27,8 +27,40 @@ const apiNodeTest = (req, res) => {
 
 const apiLogin = (req, res, next) => {
     const key = "rkGU45258GGhiolLO2465TFY5345kGU45258GGhiolLO2465TFY5345"
+    console.log(req.body.email, req.body.password)
 
-    const nickname = req.body.id
+    if(req.body.email != ''){
+        Users.findOne({email:req.body.email}).exec((err,user) => {
+            if(err){
+                console.log(err)
+            }
+            if(user){
+                if(user.password == req.body.password){
+                    console.log(user)
+                    let token
+                    token = jwt.sign({
+                        type: "JWT",
+                        email: user.email,
+                        code: user.code,
+                        language1: user.language1,
+                        language2: user.language2
+                    },key,
+                    {
+                        expiresIn: "1m",
+                        issuer: "토큰발급자"
+                    })
+                    return res.status(200).send(token)
+                }else{
+                    return res.send('wrong password')
+                }
+                
+            }else{
+                return res.send('non-existent member')
+            }
+        })
+    }
+    
+    /*const nickname = req.body.id
     const profile = req.body.pw
     let token
 
@@ -46,7 +78,7 @@ const apiLogin = (req, res, next) => {
     return res.status(200).json({
         code: 200,
         token: token
-    })
+    })*/
 }
 
 const auth = (req, res, next) => {
@@ -85,6 +117,9 @@ const apiAuth = (req, res) => {
 
 const apiRegister = (req, res) => {
     console.log(req.body.email,req.body.password,req.body.code,req.body.language1,req.body.language2)
+    if(req.body.email == '' || req.body.password == ''){
+        return res.json("Please enter it correctly")
+    }
     Users.findOne({email:req.body.email}).exec((err,user) => {
         if(err){
             console.log(err)
