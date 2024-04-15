@@ -104,14 +104,16 @@ const auth = (req, res, next) => {
 }
 
 const apiAuth = (req, res) => {
-    const nickname = req.decoded.nickname
-    const profile = req.decoded.profile
+    const email = req.decoded.email
+    const code = req.decoded.code
+    const language1 = req.decoded.language1
+    const language2 = req.decoded.language2
     console.log(profile, nickname)
 
     return res.status(200).json({
         code: 200,
         message: "정상 토큰",
-        data: {nickname: nickname, profile: profile}
+        data: {email: email, code: code, language1: language1, language2: language2}
     })
 }
 
