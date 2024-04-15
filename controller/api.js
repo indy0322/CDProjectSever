@@ -108,7 +108,7 @@ const apiAuth = (req, res) => {
     const code = req.decoded.code
     const language1 = req.decoded.language1
     const language2 = req.decoded.language2
-    console.log(profile, nickname)
+    console.log(email, code, language1, language2)
 
     return res.status(200).json({
         code: 200,
