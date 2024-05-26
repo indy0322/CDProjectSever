@@ -4,9 +4,11 @@ const Users = mongoose.model('Users')
 const Reviews = mongoose.model('Reviews')
 const nodemailer = require('nodemailer')
 
+
 const fs = require('fs')
 const path = require('path')
-const OpenAI = require('openai')
+const OpenAI = require('openai');
+const { default: axios } = require('axios');
 
 const transporter = nodemailer.createTransport({
     service:'gmail',
@@ -219,6 +221,19 @@ const apiAudio = async (req, res) => {
     
 }
 
+const apiChangeLatLng = async (req, res) => {
+    await axios.get(`https://api.vworld.kr/req/address?service=address&request=getAddress&version=2.0&crs=epsg:4326&point=${req.body.lng},${req.body.lat}&format=jsonp&type=both&zipcode=true&simple=false&key=${process.env.DIGITALTWIN}`)
+        .then(async (res) => {
+            //console.log(res.data)
+            return await res.data.response.result
+        })
+        .then(async(response) => {
+            console.log(await response)
+
+            res.json(response)
+        })
+}
+
 module.exports = {
     apiNode,
     apiNodeTest,
@@ -228,5 +243,6 @@ module.exports = {
     apiRegister,
     apiReviewRegister,
     apiAudio,
-    apiAuthNumber
+    apiAuthNumber,
+    apiChangeLatLng
 }

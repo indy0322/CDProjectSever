@@ -17,6 +17,8 @@ router.post('/authnumber',controller.apiAuthNumber)
 
 router.post('/audio', controller.apiAudio)
 
+router.post('/latlng',controller.apiChangeLatLng)
+
 
 module.exports = router;
 
