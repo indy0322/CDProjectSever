@@ -151,7 +151,7 @@ const apiReviewRegister = (req, res) => {
         return res.json('리뷰등록 완료')
     })
 }
-
+//sss
 const apiReviewRemove = (req, res) => {
     console.log(req.body.date)
     Reviews.deleteOne({date:req.body.date}).exec((err,review) => {
