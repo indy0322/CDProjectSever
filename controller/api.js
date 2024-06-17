@@ -143,13 +143,43 @@ const apiRegister = (req, res) => {
 }
 
 const apiReviewRegister = (req, res) => {
-    Reviews.create({nickname:req.body.nickname, tourname:req.body.tourname, review:req.body.review},(err) => {
+    console.log(req.body.nickname, req.body.tourId, req.body.langCode,req.body.date,req.body.review)
+    Reviews.create({nickname:req.body.nickname, tourId:req.body.tourId, langCode:req.body.langCode,date:req.body.date,review:req.body.review},(err) => {
         if(err){
             return res.json(err)
         }
         return res.json('리뷰등록 완료')
     })
-} 
+}
+
+const apiReviewRemove = (req, res) => {
+    console.log(req.body.date)
+    Reviews.deleteOne({date:req.body.date}).exec((err,review) => {
+        if(err){
+            console.log(err)
+        }
+        if(review){
+            return res.json('리뷰삭제 완료')      
+        }
+    })
+}
+
+const apiReviewInfo = (req, res) => {
+    console.log(req.body.tourId)
+    Reviews.find({tourId:req.body.tourId}).exec((err, review) => {
+        if(err){
+            console.log(err)
+            return res.json(err)
+        }
+        if(review){
+            console.log(review)
+            return res.json(review)
+        }else{
+            return res.json([])
+        }
+    })
+    //return res.json('리뷰 가져오기 완료')
+}
 
 const apiAuthNumber = (req,res) => {
     if(req.body.email){
@@ -244,5 +274,7 @@ module.exports = {
     apiReviewRegister,
     apiAudio,
     apiAuthNumber,
-    apiChangeLatLng
+    apiChangeLatLng,
+    apiReviewInfo,
+    apiReviewRemove
 }

@@ -7,10 +7,17 @@ const reviewSchema = new Schema({
         type: String,
         require: true
     },
-    tourname: {
+    tourId: {
         type: String,
         require: true,
-        unique: true
+    },
+    langCode: {
+        type: String,
+        require: true
+    },
+    date:{
+        type: String,
+        require: true
     },
     review: {
         type: String,

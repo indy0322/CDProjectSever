@@ -19,6 +19,10 @@ router.post('/audio', controller.apiAudio)
 
 router.post('/latlng',controller.apiChangeLatLng)
 
+router.post('/reviewinfo',controller.apiReviewInfo)
+
+router.post('/reviewremove',controller.apiReviewRemove)
+
 
 module.exports = router;
 
