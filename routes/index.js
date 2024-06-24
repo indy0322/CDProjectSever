@@ -23,6 +23,12 @@ router.post('/reviewinfo',controller.apiReviewInfo)
 
 router.post('/reviewremove',controller.apiReviewRemove)
 
+router.post('/wishregister',controller.apiWishRegister)
+
+router.post('/wishremove',controller.apiWishRemove)
+
+router.post('/wishinfo',controller.apiWishInfo)
+
 
 module.exports = router;
 

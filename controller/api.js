@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose')
 const Users = mongoose.model('Users')
 const Reviews = mongoose.model('Reviews')
+const Wishlist = mongoose.model('Wishlist')
 const nodemailer = require('nodemailer')
 
 
@@ -144,14 +145,18 @@ const apiRegister = (req, res) => {
 
 const apiReviewRegister = (req, res) => {
     console.log(req.body.nickname, req.body.tourId, req.body.langCode,req.body.date,req.body.review)
-    Reviews.create({nickname:req.body.nickname, tourId:req.body.tourId, langCode:req.body.langCode,date:req.body.date,review:req.body.review},(err) => {
+    Reviews.create({nickname:req.body.nickname, tourId:req.body.tourId, langCode:req.body.langCode,date:req.body.date,review:req.body.review},(err,review) => {
         if(err){
+            console.log(err)
             return res.json(err)
         }
-        return res.json('리뷰등록 완료')
+        if(review){
+            //console.log(review)
+            return res.json('리뷰등록 완료')
+        }
     })
 }
-//sss
+
 const apiReviewRemove = (req, res) => {
     console.log(req.body.date)
     Reviews.deleteOne({date:req.body.date}).exec((err,review) => {
@@ -172,13 +177,63 @@ const apiReviewInfo = (req, res) => {
             return res.json(err)
         }
         if(review){
-            console.log(review)
+            //console.log(review)
             return res.json(review)
         }else{
             return res.json([])
         }
     })
     //return res.json('리뷰 가져오기 완료')
+}
+
+const apiWishRegister = (req, res) => {
+    //console.log(req.body.tourId, req.body.tourAddress, req.body.tourImage, req.body.tourX, req.body.tourY, req.body.tourTitle)
+    Wishlist.findOne({nickname:req.body.nickName, tourId:req.body.tourId}).exec((err, one) => {
+        if(err){
+            return res.json(err)
+        }
+        if(one){
+            return res.json('이미 위시리스트에 등록됨')
+        }else{
+            Wishlist.create({nickname:req.body.nickName, tourId:req.body.tourId, tourAddress:req.body.tourAddress, tourImage:req.body.tourImage, tourX:req.body.tourX, tourY:req.body.tourY, tourTitle:req.body.tourTitle},(err, wish) => {
+                if(err){
+                    console.log(err)
+                    return res.json(err)
+                }
+                if(wish){
+                    console.log(wish)
+                    return res.json('위시리스트 등록 완료')
+                }
+            })
+        }
+    })
+    
+}
+
+const apiWishRemove = (req, res) => {
+    Wishlist.deleteOne({nickname: req.body.nickName, tourId: req.body.tourId}).exec((err, wish) => {
+        if(err){
+            console.log(err)
+        }
+        if(wish){
+            return res.json('위시리스트에서 삭제 완료')      
+        }
+    })
+}
+
+const apiWishInfo = (req, res) => {
+    Wishlist.find({nickname: req.body.nickName}).exec((err, wish) => {
+        if(err){
+            console.log(err)
+            return res.json(err)
+        }
+        if(wish){
+            console.log(wish)
+            return res.json(wish)
+        }else{
+            return res.json([])
+        }
+    })
 }
 
 const apiAuthNumber = (req,res) => {
@@ -276,5 +331,8 @@ module.exports = {
     apiAuthNumber,
     apiChangeLatLng,
     apiReviewInfo,
-    apiReviewRemove
+    apiReviewRemove,
+    apiWishRegister,
+    apiWishRemove,
+    apiWishInfo
 }
