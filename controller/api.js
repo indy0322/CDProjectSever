@@ -15,7 +15,7 @@ const transporter = nodemailer.createTransport({
     service:'gmail',
     auth:{
         user: "indy0322230@gmail.com",
-        pass: "perovebckyqnwwwz",
+        pass: "",
     }
 })
 
@@ -195,7 +195,7 @@ const apiWishRegister = (req, res) => {
         if(one){
             return res.json('이미 위시리스트에 등록됨')
         }else{
-            Wishlist.create({nickname:req.body.nickName, tourId:req.body.tourId, tourAddress:req.body.tourAddress, tourImage:req.body.tourImage, tourX:req.body.tourX, tourY:req.body.tourY, tourTitle:req.body.tourTitle},(err, wish) => {
+            Wishlist.create({nickname:req.body.nickName, tourId:req.body.tourId, tourAddress:req.body.tourAddress, tourImage:req.body.tourImage, tourX:req.body.tourX, tourY:req.body.tourY, tourTitle:req.body.tourTitle, date:req.body.date},(err, wish) => {
                 if(err){
                     console.log(err)
                     return res.json(err)
