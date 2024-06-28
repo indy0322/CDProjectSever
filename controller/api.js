@@ -221,6 +221,17 @@ const apiWishRemove = (req, res) => {
     })
 }
 
+const apiWishRemove2 = (req, res) => {
+    Wishlist.deleteOne({date: req.body.date}).exec((err, wish) => {
+        if(err){
+            console.log(err)
+        }
+        if(wish){
+            return res.json('위시리스트에서 삭제 완료')
+        }
+    })
+}
+
 const apiWishInfo = (req, res) => {
     Wishlist.find({nickname: req.body.nickName}).exec((err, wish) => {
         if(err){
@@ -334,5 +345,6 @@ module.exports = {
     apiReviewRemove,
     apiWishRegister,
     apiWishRemove,
+    apiWishRemove2,
     apiWishInfo
 }

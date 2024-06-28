@@ -27,6 +27,8 @@ router.post('/wishregister',controller.apiWishRegister)
 
 router.post('/wishremove',controller.apiWishRemove)
 
+router.post('/wishremove2',controller.apiWishRemove2)
+
 router.post('/wishinfo',controller.apiWishInfo)
 
 
