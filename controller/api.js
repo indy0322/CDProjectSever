@@ -49,7 +49,7 @@ const apiLogin = (req, res, next) => {
                         language2: user.language2
                     },key,
                     {
-                        expiresIn: "60m",
+                        expiresIn: "120m",
                         issuer: "토큰발급자"
                     })
                     return res.status(200).send(token)
