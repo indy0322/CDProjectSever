@@ -4,6 +4,14 @@ const Users = mongoose.model('Users')
 const Reviews = mongoose.model('Reviews')
 const Wishlist = mongoose.model('Wishlist')
 const nodemailer = require('nodemailer')
+const https = require('https')
+
+const agent = new https.Agent({
+    rejectUnauthorized: false
+})
+
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+
 
 
 const fs = require('fs')
@@ -330,6 +338,24 @@ const apiChangeLatLng = async (req, res) => {
         })
 }
 
+const apiHknuChatgpt = async (req, res) => {
+    try {
+        const response = await axios.post('https://cesrv.hknu.ac.kr/srv/gpt', {
+            "service": "gpt",
+            "question": `${req.body.tourTitle}을 ${req.body.language} 설명해`,
+            "hash": `${req.body.key}`
+        }, {
+            headers: {'Content-Type': 'application/json'},
+        });
+
+        return res.json(response.data);
+
+    } catch (error) {
+        console.error('Error during API call:', error.message);
+        return res.status(500).json({ error: 'Internal Server Error' });
+    }
+}
+
 module.exports = {
     apiNode,
     apiNodeTest,
@@ -346,5 +372,6 @@ module.exports = {
     apiWishRegister,
     apiWishRemove,
     apiWishRemove2,
-    apiWishInfo
+    apiWishInfo,
+    apiHknuChatgpt
 }

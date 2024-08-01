@@ -31,6 +31,8 @@ router.post('/wishremove2',controller.apiWishRemove2)
 
 router.post('/wishinfo',controller.apiWishInfo)
 
+router.post('/hknuchatgpt',controller.apiHknuChatgpt)
+
 
 module.exports = router;
 
