@@ -346,6 +346,7 @@ const apiHknuChatgpt = async (req, res) => {
             "hash": `${req.body.key}`
         }, {
             headers: {'Content-Type': 'application/json'},
+            httpAgent: agent,
         });
 
         return res.json(response.data);
