@@ -10,7 +10,7 @@ const agent = new https.Agent({
     rejectUnauthorized: false
 })
 
-//process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'; //apiHknuChatgpt 를 호출할 때 AxiosError: unable to verify the first certificate 에러가 나오면 이 코드의 주석을 풀어준다
 
 
 
