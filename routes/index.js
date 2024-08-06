@@ -11,6 +11,8 @@ router.get("/auth", controller.auth, controller.apiAuth)
 
 router.post("/register", controller.apiRegister)
 
+router.post('/changeuser', controller.apiChangeUser)
+
 router.post("/reviewregister", controller.apiReviewRegister)
 
 router.post('/authnumber',controller.apiAuthNumber)

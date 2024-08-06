@@ -8,7 +8,7 @@ const https = require('https')
 
 const agent = new https.Agent({
     rejectUnauthorized: false
-})
+}) //apiHknuChatgpt 를 호출할 때 AxiosError: unable to verify the first certificate 에러가 나올 때 httpAgent: 에 추가하기 위한 용도
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'; //apiHknuChatgpt 를 호출할 때 AxiosError: unable to verify the first certificate 에러가 나오면 이 코드의 주석을 풀어준다
 
@@ -149,6 +149,28 @@ const apiRegister = (req, res) => {
         }
     })
        
+}
+
+const apiChangeUser = (req, res) => {
+    //console.log(req.body.email, req.body.currentPassword, req.body.changePassword, req.body.confirmPassword, req.body.code, req.body.language1, req.body.language2)
+    Users.findOne({email:req.body.email, password: req.body.currentPassword}).exec((err, user) => {
+        if(err){
+            console.log(err)
+        }
+        if(user){
+            //console.log(user)
+            Users.updateOne({email:req.body.email, password: req.body.currentPassword},{password:req.body.changePassword, code:req.body.code, language1:req.body.language1,language2:req.body.language2}).exec((err, user) => {
+                if(err){
+                    console.log('err2: ',err)
+                }
+                if(user){
+                    return res.json('Member information has been changed')
+                }
+            })
+        }else{
+            return res.json('No members exist')
+        }
+    })
 }
 
 const apiReviewRegister = (req, res) => {
@@ -364,6 +386,7 @@ module.exports = {
     auth,
     apiAuth,
     apiRegister,
+    apiChangeUser,
     apiReviewRegister,
     apiAudio,
     apiAuthNumber,
