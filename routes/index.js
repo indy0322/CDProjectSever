@@ -11,7 +11,9 @@ router.get("/auth", controller.auth, controller.apiAuth)
 
 router.post("/register", controller.apiRegister)
 
-router.post('/changeuser', controller.apiChangeUser)
+router.post('/changepassword', controller.apiChangePassword)
+
+router.post('/changelang', controller.apiChangeLang)
 
 router.post("/reviewregister", controller.apiReviewRegister)
 
