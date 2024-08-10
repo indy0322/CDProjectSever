@@ -174,13 +174,13 @@ const apiChangePassword = (req, res) => {
 }
 
 const apiChangeLang = (req, res) => {
-    Users.findOne({email:req.body.email}).exec((err, user) => {
+    Users.findOne({email:req.body.email, password: req.body.currentPassword}).exec((err, user) => {
         if(err){
             console.log(err)
         }
         if(user){
             //console.log(user)
-            Users.updateOne({email:req.body.email},{code:req.body.code,language1:req.body.language1,language2:req.body.language2}).exec((err, user) => {
+            Users.updateOne({email:req.body.email, password: req.body.currentPassword},{code:req.body.code,language1:req.body.language1,language2:req.body.language2}).exec((err, user) => {
                 if(err){
                     console.log('err2: ',err)
                 }
