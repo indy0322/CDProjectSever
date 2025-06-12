@@ -6,14 +6,6 @@ const Wishlist = mongoose.model('Wishlist')
 const nodemailer = require('nodemailer')
 const https = require('https')
 
-const agent = new https.Agent({
-    rejectUnauthorized: false
-}) //apiHknuChatgpt 를 호출할 때 AxiosError: unable to verify the first certificate 에러가 나올 때 httpAgent: 에 추가하기 위한 용도
-
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'; //apiHknuChatgpt 를 호출할 때 AxiosError: unable to verify the first certificate 에러가 나오면 이 코드의 주석을 풀어준다
-
-
-
 const fs = require('fs')
 const path = require('path')
 const OpenAI = require('openai');
@@ -37,7 +29,7 @@ const apiNodeTest = (req, res) => {
 }
 
 const apiLogin = (req, res, next) => {
-    const key = "rkGU45258GGhiolLO2465TFY5345kGU45258GGhiolLO2465TFY5345"
+    const key = process.env.TOKENKEY
     console.log(req.body.email, req.body.password)
 
     if(req.body.email != ''){
@@ -71,29 +63,10 @@ const apiLogin = (req, res, next) => {
         })
     }
     
-    /*const nickname = req.body.id
-    const profile = req.body.pw
-    let token
-
-    token = jwt.sign({
-        type: "JWT",
-        nickname: nickname,
-        profile: profile
-    },key,
-    {
-        expiresIn: "1m",
-        issuer: "토큰발급자"
-    }
-    )
-    
-    return res.status(200).json({
-        code: 200,
-        token: token
-    })*/
 }
 
 const auth = (req, res, next) => {
-    const key = "rkGU45258GGhiolLO2465TFY5345kGU45258GGhiolLO2465TFY5345"
+    const key = process.env.TOKENKEY
 
     try{
         req.decoded = jwt.verify(req.headers.authorization, key)
@@ -152,13 +125,13 @@ const apiRegister = (req, res) => {
 }
 
 const apiChangePassword = (req, res) => {
-    //console.log(req.body.email, req.body.currentPassword, req.body.changePassword, req.body.confirmPassword, req.body.code, req.body.language1, req.body.language2)
+    
     Users.findOne({email:req.body.email, password: req.body.currentPassword}).exec((err, user) => {
         if(err){
             console.log(err)
         }
         if(user){
-            //console.log(user)
+            
             Users.updateOne({email:req.body.email, password: req.body.currentPassword},{password:req.body.changePassword}).exec((err, user) => {
                 if(err){
                     console.log('err2: ',err)
@@ -179,7 +152,7 @@ const apiChangeLang = (req, res) => {
             console.log(err)
         }
         if(user){
-            //console.log(user)
+            
             Users.updateOne({email:req.body.email, password: req.body.currentPassword},{code:req.body.code,language1:req.body.language1,language2:req.body.language2}).exec((err, user) => {
                 if(err){
                     console.log('err2: ',err)
@@ -202,7 +175,7 @@ const apiReviewRegister = (req, res) => {
             return res.json(err)
         }
         if(review){
-            //console.log(review)
+            
             return res.json('리뷰등록 완료')
         }
     })
@@ -234,11 +207,9 @@ const apiReviewInfo = (req, res) => {
             return res.json([])
         }
     })
-    //return res.json('리뷰 가져오기 완료')
 }
 
 const apiWishRegister = (req, res) => {
-    //console.log(req.body.tourId, req.body.tourAddress, req.body.tourImage, req.body.tourX, req.body.tourY, req.body.tourTitle)
     Wishlist.findOne({nickname:req.body.nickName, tourId:req.body.tourId}).exec((err, one) => {
         if(err){
             return res.json(err)
@@ -371,7 +342,7 @@ const apiAudio = async (req, res) => {
 const apiChangeLatLng = async (req, res) => {
     await axios.get(`https://api.vworld.kr/req/address?service=address&request=getAddress&version=2.0&crs=epsg:4326&point=${req.body.lng},${req.body.lat}&format=jsonp&type=both&zipcode=true&simple=false&key=${process.env.DIGITALTWIN}`)
         .then(async (res) => {
-            //console.log(res.data)
+            console.log(res.data)
             return await res.data.response.result
         })
         .then(async(response) => {
@@ -379,25 +350,6 @@ const apiChangeLatLng = async (req, res) => {
 
             res.json(response)
         })
-}
-
-const apiHknuChatgpt = async (req, res) => {
-    try {
-        const response = await axios.post('https://cesrv.hknu.ac.kr/srv/gpt', {
-            "service": "gpt",
-            "question": `${req.body.tourTitle}을 ${req.body.language} 설명해`,
-            "hash": `${req.body.key}`
-        }, {
-            headers: {'Content-Type': 'application/json'},
-            httpAgent: agent,
-        });
-
-        return res.json(response.data);
-
-    } catch (error) {
-        console.error('Error during API call:', error.message);
-        return res.status(500).json({ error: 'Internal Server Error' });
-    }
 }
 
 module.exports = {

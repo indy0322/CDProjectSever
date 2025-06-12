@@ -4,13 +4,11 @@ const connect = () => {
     if(process.env.NODE_ENV !== 'production'){
         
     }//개발모드가 아닌 배포 모드에서 필요한 코드
-
-
-    const dbURI = 'mongodb+srv://myatlasdbuser:myatlasdbuser@cluster0.qaz81mk.mongodb.net'  
-    mongoose.connect(dbURI,{dbName: 'testproject'})
+  
+    mongoose.connect(process.env.MONGODB,{dbName: 'testproject'})
 
     mongoose.connection.on('connected',function(){
-        console.log('MongoDB 연결이 되었습니다 : ' + dbURI)
+        console.log('MongoDB 연결이 되었습니다 : ' + process.env.MONGODB)
     })
 
     mongoose.connection.on('error',(error) => {
