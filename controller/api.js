@@ -371,5 +371,4 @@ module.exports = {
     apiWishRemove,
     apiWishRemove2,
     apiWishInfo,
-    apiHknuChatgpt
 }
