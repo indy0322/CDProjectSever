@@ -5,6 +5,7 @@ const Reviews = mongoose.model('Reviews')
 const Wishlist = mongoose.model('Wishlist')
 const nodemailer = require('nodemailer')
 const https = require('https')
+const FormData = require('form-data')
 
 const fs = require('fs')
 const path = require('path')
@@ -339,6 +340,44 @@ const apiAudio = async (req, res) => {
     
 }
 
+const apiSpeechToText = async (req, res) => {
+    try {
+        const file = req.file
+    
+        if (!file) {
+          return res.status(400).json({ message: '파일이 없습니다.' })
+        }
+    
+        const formData = new FormData()
+        formData.append('model', 'whisper-1')
+    
+        // ⭐ 핵심: buffer 사용
+        formData.append('file', file.buffer, {
+          filename: file.originalname,
+          contentType: file.mimetype,
+        })
+    
+        const response = await axios.post(
+          'https://api.openai.com/v1/audio/transcriptions',
+          formData,
+          {
+            headers: {
+              ...formData.getHeaders(),
+              Authorization: `Bearer ${process.env.CHATGPTKEY}`,
+            },
+          }
+        )
+    
+        res.json({
+          text: response.data.text,
+        })
+    
+      } catch (error) {
+        console.error(error.response?.data || error)
+        res.status(500).json({ message: 'Speech to Text 실패' })
+      }
+}
+
 const apiChangeLatLng = async (req, res) => {
     await axios.get(`https://api.vworld.kr/req/address?service=address&request=getAddress&version=2.0&crs=epsg:4326&point=${req.body.lng},${req.body.lat}&format=jsonp&type=both&zipcode=true&simple=false&key=${process.env.DIGITALTWIN}`)
         .then(async (res) => {
@@ -351,6 +390,30 @@ const apiChangeLatLng = async (req, res) => {
             res.json(response)
         })
 }
+
+const apiTourSearch = async (req, res) => {
+    try {
+        const { keyword } = req.query;
+
+        const encodedKeyword = encodeURIComponent(keyword);
+
+        const url =
+            `https://apis.data.go.kr/B551011/KorService2/searchKeyword2` +
+            `?serviceKey=${process.env.TOUR_API_KEY}` +
+            `&MobileOS=ETC` +
+            `&MobileApp=APPTest` +
+            `&_type=json` +
+            `&numOfRows=15` +
+            `&keyword=${encodedKeyword}`;
+
+        const response = await axios.get(url);
+
+        res.json(response.data);
+    } catch (err) {
+        console.error(err.response?.data || err);
+        res.status(500).json({ message: 'Tour API error' });
+    }
+};
 
 module.exports = {
     apiNode,
@@ -371,4 +434,6 @@ module.exports = {
     apiWishRemove,
     apiWishRemove2,
     apiWishInfo,
+    apiTourSearch,
+    apiSpeechToText,
 }

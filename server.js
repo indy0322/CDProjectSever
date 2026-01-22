@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const cors = require('cors')
 const mongodb = require('./model/db');
+require('dotenv').config();
 
 mongodb.connect();
 
