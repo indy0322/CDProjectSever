@@ -415,6 +415,39 @@ const apiTourSearch = async (req, res) => {
     }
 };
 
+const apiTourExplain = async (req, res) => {
+    try {
+      const { tourTitle, lang } = req.body
+  
+      if (!tourTitle || !lang) {
+        return res.status(400).json({ message: '필수 값 누락' })
+      }
+  
+      const openai = new OpenAI({
+        apiKey: process.env.CHATGPTKEY
+      })
+  
+      const response = await openai.chat.completions.create({
+        model: 'gpt-3.5-turbo',
+        messages: [
+          {
+            role: 'user',
+            content: `${tourTitle}을 ${lang}로 설명해줘`
+          }
+        ],
+        temperature: 1
+      })
+  
+      res.json({
+        text: response.choices[0].message.content
+      })
+  
+    } catch (error) {
+      console.error(error.response?.data || error)
+      res.status(500).json({ message: 'Tour explain 실패' })
+    }
+  }
+
 module.exports = {
     apiNode,
     apiNodeTest,
@@ -436,4 +469,5 @@ module.exports = {
     apiWishInfo,
     apiTourSearch,
     apiSpeechToText,
+    apiTourExplain,
 }

@@ -47,6 +47,8 @@ router.post('/wishinfo',controller.apiWishInfo)
 
 router.get('/tour/search', controller.apiTourSearch)
 
+router.post('/tour/explain', controller.apiTourExplain)
+
 
 module.exports = router;
 
